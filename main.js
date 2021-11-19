@@ -47,14 +47,20 @@ function Validator(options) {
                 isValidForm = false;
             }
         });
-
-        var enableInputs = formElement.querySelectorAll('[name]');
-        console.log(enableInputs);
+        
         if(isValidForm) {
+            //submit voi JS
             if(typeof options.onSubmit === 'function') {
-                options.onSubmit({
-                    name: 'quang'
-                })
+                var enableInputs = formElement.querySelectorAll('[name]:not([disabled])');
+                var formValues = Array.from(enableInputs).reduce(function(values, input) {
+                    values[input.name] = input.value;
+                    return values;
+                }, {});
+                options.onSubmit(formValues);
+            }
+            //submit voi HTML (default submit)
+            else {
+                formElement.submit();
             }
         }
     }
